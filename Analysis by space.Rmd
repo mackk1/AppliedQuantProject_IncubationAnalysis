@@ -1,0 +1,136 @@
+---
+title: "North vs South and Location"
+author: "Kevin Mack"
+date: "2/26/2016"
+output: word_document
+---
+
+```{r}
+KM_Survival <- read.csv("~/Incubation Analysis/Trial1_survival.csv")
+KM_Righting <- read.csv("~/Incubation Analysis/Trial1_sublethal.csv")
+names(KM_Survival)
+sapply(KM_Survival, class)
+KM_Survival$Block=as.factor(KM_Survival$Block)
+KM_Righting$Block=as.factor(KM_Righting$Block)
+sapply(KM_Survival, class)
+
+
+
+library(survival)
+library(KMsurv)
+```
+
+
+
+Analysis by SITE
+```{r}
+#LETHAL
+#KM Curves of main effects
+site=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+plot(site, ylab='survival probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+site_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+site_dif
+
+#Cox proportional hazards model fit
+site_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Survival)
+summary(site_cox)
+
+#ANCOVA of main effects 
+anova(site_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+site_righting=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+site_righting_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+site_righting_dif
+
+#Cox proportional hazards model fit
+site_righting_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Righting)
+summary(site_righting_cox)
+
+#ANCOVA of main effects 
+anova(site_righting_cox)
+
+
+
+
+```
+
+
+Analysis by LOCATION
+```{r}
+#LETHAL
+#KM Curves of main effects
+location=survfit(Surv(Duration,Status)~Block+Location+Sex, data=KM_Survival)
+plot(location, ylab='righting probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+location_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex, data=KM_Survival)
+location_dif
+
+#Cox proportional hazards model fit
+location_cox=coxph(Surv(Duration,Status)~Block+Location+Sex+CW, data=KM_Survival)
+summary(location_cox)
+
+#ANCOVA of main effects 
+anova(location_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+location_righting=survfit(Surv(Duration,Status)~Block+Location+Sex, data=KM_Righting)
+plot(location_righting, ylab='righting probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+location_righting_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex, data=KM_Righting)
+location_righting_dif
+
+#Cox proportional hazards model fit
+location_righting_cox=coxph(Surv(Duration,Status)~Block+Location+Sex+CW, data=KM_Righting)
+summary(location_righting_cox)
+
+#ANCOVA of main effects 
+anova(location_righting_cox)
+```
+
+
+Analysis by REGION
+```{r}
+#LETHAL
+#KM Curves of main effects
+region=survfit(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
+plot(region, ylab='survival probabilty', xlab='Duration', main='Model 1')
+#disregard everything
+
+#Log Rank test of main effects tests for differences
+region_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
+region_dif
+
+#Cox proportional hazards model fit
+region_cox=coxph(Surv(Duration,Status)~Block+Region+Sex+CW, data=KM_Survival)
+summary(region_cox)
+
+#ANOVA of main effects 
+anova(region_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+region_righting=survfit(Surv(Duration,Status)~Block+Region+Sex, data=KM_Righting)
+plot(region_righting, ylab='survival probabilty', xlab='Duration', main='Model 1')
+#disregard everything
+
+#Log Rank test of main effects tests for differences
+region_righting_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, data=KM_Righting)
+region_righting_dif
+
+#Cox proportional hazards model fit
+region_righting_cox=coxph(Surv(Duration,Status)~Block+Region+Sex+CW, data=KM_Righting)
+summary(region_righting_cox)
+
+#ANOVA of main effects 
+anova(region_righting_cox)
+```
