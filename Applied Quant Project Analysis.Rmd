@@ -1,0 +1,199 @@
+---
+title: "Applied Quant Analysis"
+author: "Kevin Mack"
+date: "3/25/2016"
+output: pdf_document
+---
+
+Preliminary Analysis
+--
+This is preliminary analysis of lethal and righting responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab sixe (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that Sex was the strongest effect, followed by the covariate Carapace Width, and Site. There were no significant interactions.
+```{r}
+KM_Survival <- read.csv("~/Incubation Analysis/Trial1_survival.csv")
+KM_Righting <- read.csv("~/Incubation Analysis/Trial1_sublethal.csv")
+KM_Survival$Block=as.factor(KM_Survival$Block)
+KM_Righting$Block=as.factor(KM_Righting$Block)
+library(survival)
+
+#ANCOVA of main effects: Lethal
+options(contrasts=c("contr.sum", "contr.poly"))
+fit1=(aov(lm(Duration~Site*Sex*Block+CW, data=KM_Survival)))
+drop1(fit1,~.,test='F')
+
+#Boxplots: Lethal
+plot(KM_Survival$Sex, KM_Survival$Duration)
+plot(KM_Survival$Site, KM_Survival$Duration)
+plot(KM_Survival$CW,KM_Survival$Duration)
+plot(KM_Survival$Duration, KM_Survival$CW ) #closley related to sex. Examine males and females separetely?
+
+#ANCOVA of main effests: Righting Response
+options(contrasts=c("contr.sum", "contr.poly"))
+fit1=(aov(lm(Duration~Site*Sex*Block+CW, data=KM_Righting)))
+drop1(fit1,~.,test='F')
+
+#Boxplots: Righting Response
+plot(KM_Righting$Sex, KM_Righting$Duration)
+plot(KM_Righting$Site, KM_Righting$Duration)
+plot(KM_Righting$CW,KM_Righting$Duration)
+plot(KM_Righting$Duration, KM_Righting$CW ) #closley related to sex. Examine males and females separetely?
+
+
+```
+
+Analysis of Main Effects
+--
+This is analysis of lethal and righting responses of P. armatus. I tested the main effects: site, sex, block and crab sixe (CW) by generating Kaplan-Meier curves for lethal and righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects, and which were tested with ANOVA.
+
+```{r}
+#LETHAL-------------------------------------------------------------------------
+#KM Curves of main effects
+let_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+plot(let_mod1, ylab='Survival Probability', xlab='Duration') #disregard everything this figure is not for publication
+
+#Log Rank test of main effects tests for differences
+let_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+let_mod1_dif
+
+#Cox proportional hazards model fit
+let_mod1_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Survival)
+summary(let_mod1_cox)
+
+#ANOVA of main effects 
+anova(let_mod1_cox)
+
+#RIGHTING RESPONSE------------------------------------------------------------
+#KM Curves of main effects
+rr_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+plot(rr_mod1, ylab='Survival Probability', xlab='Duration') #disregard everything this figure is not for publication
+
+#Log Rank test of main effects tests for differences
+rr_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+rr_mod1_dif
+
+#Cox proportional hazards model fit
+rr_mod1_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Righting)
+summary(rr_mod1_cox)
+
+#ANOVA of main effects 
+anova(rr_mod1_cox)
+```
+
+
+
+
+Spatial Analysis
+--
+Analysis of lethal and righting responses of P. armatus at varying spatial scales: Site, Location, Region
+
+Analysis by SITE
+```{r}
+#LETHAL
+#KM Curves of main effects
+site=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+plot(site, ylab='survival probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+site_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
+site_dif
+
+#Cox proportional hazards model fit
+site_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Survival)
+summary(site_cox)
+
+#ANCOVA of main effects 
+anova(site_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+site_righting=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+site_righting_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+site_righting_dif
+
+#Cox proportional hazards model fit
+site_righting_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Righting)
+summary(site_righting_cox)
+
+#ANCOVA of main effects 
+anova(site_righting_cox)
+
+```
+
+
+Analysis by LOCATION
+```{r}
+#LETHAL
+#KM Curves of main effects
+location=survfit(Surv(Duration,Status)~Block+Location+Sex, data=KM_Survival)
+plot(location, ylab='righting probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+location_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex, data=KM_Survival)
+location_dif
+
+#Cox proportional hazards model fit
+location_cox=coxph(Surv(Duration,Status)~Block+Location+Sex+CW, data=KM_Survival)
+summary(location_cox)
+
+#ANCOVA of main effects 
+anova(location_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+location_righting=survfit(Surv(Duration,Status)~Block+Location+Sex, data=KM_Righting)
+plot(location_righting, ylab='righting probabilty', xlab='Duration', main='Model 1') #disregard everything
+
+#Log Rank test of main effects tests for differences
+location_righting_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex, data=KM_Righting)
+location_righting_dif
+
+#Cox proportional hazards model fit
+location_righting_cox=coxph(Surv(Duration,Status)~Block+Location+Sex+CW, data=KM_Righting)
+summary(location_righting_cox)
+
+#ANCOVA of main effects 
+anova(location_righting_cox)
+```
+
+
+Analysis by REGION
+```{r}
+#LETHAL
+#KM Curves of main effects
+region=survfit(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
+plot(region, ylab='survival probabilty', xlab='Duration', main='Model 1')
+#disregard everything
+
+#Log Rank test of main effects tests for differences
+region_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
+region_dif
+
+#Cox proportional hazards model fit
+region_cox=coxph(Surv(Duration,Status)~Block+Region+Sex+CW, data=KM_Survival)
+summary(region_cox)
+
+#ANOVA of main effects 
+anova(region_cox)
+
+#SUBLETHAL
+#KM Curves of main effects
+region_righting=survfit(Surv(Duration,Status)~Block+Region+Sex, data=KM_Righting)
+plot(region_righting, ylab='survival probabilty', xlab='Duration', main='Model 1')
+#disregard everything
+
+#Log Rank test of main effects tests for differences
+region_righting_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, data=KM_Righting)
+region_righting_dif
+
+#Cox proportional hazards model fit
+region_righting_cox=coxph(Surv(Duration,Status)~Block+Region+Sex+CW, data=KM_Righting)
+summary(region_righting_cox)
+
+#ANOVA of main effects 
+anova(region_righting_cox)
+```
+
+How to decide what to present? 
+
