@@ -7,7 +7,7 @@ output: word_document
 
 Preliminary Analysis
 --
-This is preliminary analysis of lethal and righting responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that Sex was the strongest effect, followed by the covariate Carapace Width, and Site. There were no significant interactions.
+This is preliminary analysis of lethal and righting responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that Sex was the strongest effect, followed by the covariate Carapace Width, and  Site. There were no significant interactions.
 ```{r}
 KM_Survival <- read.csv("~/Applied Quant Project/Trial1_survival.csv")
 KM_Righting <- read.csv("~/Applied Quant Project/Trial1_sublethal.csv")
