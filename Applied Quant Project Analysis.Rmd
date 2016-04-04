@@ -2,7 +2,7 @@
 title: "Applied Quant Analysis"
 author: "Kevin Mack"
 date: "3/25/2016"
-output: pdf_document
+output: word_document
 ---
 
 Preliminary Analysis
@@ -81,8 +81,6 @@ summary(rr_mod1_cox)
 #ANOVA of main effects 
 anova(rr_mod1_cox)
 ```
-
-
 
 
 Spatial Analysis
@@ -215,6 +213,8 @@ anova(region_righting_cox)
 ```
 
 How to decide what to present? 
+
+
 
 Analysis of Presentation Figures
 --
