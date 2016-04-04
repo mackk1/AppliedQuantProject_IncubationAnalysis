@@ -2,218 +2,173 @@
 title: "BEM_RightingResponse"
 author: "Kevin Mack"
 date: "2/18/2016"
-output: word_document
+output: pdf_document
 ---
 
-Exploratory analysis of righting response data. This is testing a bianary response did the animal right itself, yes/no, and at what duration did the animal fail to right itself. 
+Preliminary Analysis
+--
+This is preliminary/esploratory analysis of sublethal righting responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that the covariate CW was the strongest effect. There were no significant interactions.
 ```{r}
-Trial1_sub <- read.csv("~/Incubation Analysis/Trial1_sublethal.csv")
-names(Trial1_sub)
-sapply(Trial1_sub, class)
-Trial1_sub$Block=as.factor(Trial1_sub$Block)
-sapply(Trial1_sub, class)
-
+KM_Righting <- read.csv("~/Applied Quant Project/Trial1_sublethal.csv")
+KM_Righting$Block=as.factor(KM_Righting$Block)
 library(survival)
-library(KMsurv)
 
-#Visually examine main effects
-plot(Duration~Site+Sex+Block+CW, data=Trial1_sub)
+#ANCOVA of main effests: Righting Response
+options(contrasts=c("contr.sum", "contr.poly"))
+fit1=(aov(lm(Duration~Site*Sex*Block+CW, data=KM_Righting)))
+drop1(fit1,~.,test='F')
 
-#Generate KM curve for main effects
-mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=Trial1_sub)
-plot(mod1, ylab='righting probabilty', xlab='Duration', main='Model 1') 
+#Boxplots: Righting Response
+plot(KM_Righting$Sex, KM_Righting$Duration)
+plot(KM_Righting$Site, KM_Righting$Duration)
+plot(KM_Righting$CW,KM_Righting$Duration)
+plot(KM_Righting$Duration, KM_Righting$CW ) 
+#closley related to sex. Examine males and females separetely?
+
+```
+
+
+Analysis of Main Effects
+--
+This is analysis of righting responses of P. armatus. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves for righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects, which were tested with ANOVA.
+```{r}
+#KM Curves of main effects
+rr_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+plot(rr_mod1, ylab='Survival Probability', xlab='Duration') 
+#disregard this figure is not for publication
 
 #Log Rank test of main effects tests for differences
-mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=Trial1_sub)
-mod1_dif
+rr_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+rr_mod1_dif
 
 #Cox proportional hazards model fit
-mod1_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=Trial1_sub)
-summary(mod1_cox)
+rr_mod1_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Righting)
+summary(rr_mod1_cox)
 
 #ANOVA of main effects 
-anova(mod1_cox)
+anova(rr_mod1_cox)
 ```
 
-
+Analysis of Spatial Scale
+--
+The following is analysis of righting responses of P. armatus at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in righting response. Differences in righting response exist between sites, locations, and regions.
 ```{r}
-tapply(Trial1_sub$Duration,Trial1_sub$Sex,mean)
-
-sex=survfit(Surv(Duration,Status)~Sex, data=Trial1_sub)
-plot(sex, lty=c(1,2),ylab='righting probabilty', xlab='Duration', main='Sex')
-legend(3,0.2,c('Females', 'Males'),lty=c(1,2))
-
-sex_dif=survdiff(Surv(Duration,Status)~Sex, data=Trial1_sub)
-sex_dif
-
-sex_cox=coxph(Surv(Duration,Status)~Sex, data=Trial1_sub)
-summary(sex_cox)
-
-anova(sex_cox)
-```
-
-```{r}
-
-#SUBLETHAL
+##Analysis by SITE
 #KM Curves of main effects
-site_righting=survfit(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
-plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Model 1') #disregard everything
+site_righting=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
+plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Model 1') 
+#disregard
 
 #Log Rank test of main effects tests for differences
-site_righting_dif=survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
+site_righting_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex,
+                           data=KM_Righting)
 site_righting_dif
 
 #Cox proportional hazards model fit
-site_righting_cox=coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
+site_righting_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, 
+                        data=KM_Righting)
 summary(site_righting_cox)
 
 #ANCOVA of main effects 
 anova(site_righting_cox)
-
-
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Righting Response at 10C: Main Effects
 ```{r}
-right_10 = read.csv("~/Incubation Analysis/Trial1_RightingResponse_10C.csv")
-names(right_10)
-sapply(right_10, class)
-right_10$Block=as.factor(right_10$Block)
-sapply(right_10, class)
-
-plot(ResponseTime~Site+Sex+Block+CW..mm., data=right_10)
-
-kruskal.test(ResponseTime~Site, data=right_10)
-kruskal.test(ResponseTime~Sex, data=right_10)
-kruskal.test(ResponseTime~Block, data=right_10)
-
-
+##Analysis by LOCATION
 #KM Curves of main effects
-main_10=survfit(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_10)
-plot(main_10, ylab='Righting Probability', xlab='Response Time', main='10 C') #disregard this
+location_righting=survfit(Surv(Duration,Status)~Block+Location+Sex, 
+                          data=KM_Righting)
+plot(location_righting, ylab='righting probabilty', xlab='Duration', 
+     main='Model 1') #disregard 
 
 #Log Rank test of main effects tests for differences
-main_10_dif=survdiff(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_10)
-main_10_dif
+location_righting_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex,
+                               data=KM_Righting)
+location_righting_dif
 
 #Cox proportional hazards model fit
-main_10_cox=coxph(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_10)
-summary(main_10_cox)
+location_righting_cox=coxph(Surv(Duration,Status)~Block+Location+Sex+CW,
+                            data=KM_Righting)
+summary(location_righting_cox)
 
-#ANOVA of main effects 
-anova(main_10_cox)
-
+#ANCOVA of main effects 
+anova(location_righting_cox)
 ```
 
-Righting Response at 8C: Main Effects
 ```{r}
-right_8 = read.csv("~/Incubation Analysis/Trial1_RightingResponse_8C.csv")
-names(right_8)
-sapply(right_8, class)
-right_8$Block=as.factor(right_8$Block)
-sapply(right_8, class)
-
-plot(ResponseTime~Site+Sex+Block+CW..mm., data=right_8)
-
+##Analysis by REGION
 #KM Curves of main effects
-main_8=survfit(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_8)
-plot(main_8, ylab='Righting Probability', xlab='Response Time', main='8 C') #disregard this
+region_righting=survfit(Surv(Duration,Status)~Block+Region+Sex, 
+                        data=KM_Righting)
+plot(region_righting, ylab='survival probabilty', xlab='Duration', 
+     main='Model 1')
+#disregard
 
 #Log Rank test of main effects tests for differences
-main_8_dif=survdiff(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_8)
-main_8_dif
+region_righting_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, 
+                             data=KM_Righting)
+region_righting_dif
 
 #Cox proportional hazards model fit
-main_8_cox=coxph(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_8)
-summary(main_8_cox)
+region_righting_cox=coxph(Surv(Duration,Status)~Block+Region+Sex+CW, 
+                          data=KM_Righting)
+summary(region_righting_cox)
 
 #ANOVA of main effects 
-anova(main_8_cox)
+anova(region_righting_cox)
 ```
 
-Righting Response 8C: Sexes
-```{r}
-#Mean Response Time of sexes
-tapply(right_8$ResponseTime,right_8$Sex,mean)
 
-#KM Curves: Differences in Sex
-sex_8=survfit(Surv(ResponseTime,Status)~Sex, data=right_8)
-plot(sex_8, lty=c(2,1), ylab='Righting Probability', xlab='Response Time', main='8 C: Sex')
-legend(1,0.2,c('Females', 'Males'),lty=c(1,2))
-
-#Log Rank test of sex differences
-sex_8_dif=survdiff(Surv(ResponseTime,Status)~Sex, data=right_8)
-sex_8_dif
-
+Analysis of Presentation Figures
+--
+The following is analysis of each of the presentation figures
+Figure 6: Sublethal Site
+```{r, echo=F}
+#Log Rank test 
+survdiff(Surv(Duration,Status)~Block+Site, data=KM_Righting)
 #Cox proportional hazards model fit
-sex_8_cox=coxph(Surv(ResponseTime,Status)~Sex, data=right_8)
-summary(sex_8_cox)
-
-#ANOVA of sex differences 
-anova(sex_8_cox)
+summary(coxph(Surv(Duration,Status)~Block+Site, data=KM_Righting))
+#ANCOVA of main effects 
+anova(coxph(Surv(Duration,Status)~Block+Site, data=KM_Righting))
 
 ```
 
-
-Righting Response at 6C: Main Effects
-
-```{r}
-right_6 = read.csv("~/Incubation Analysis/Trial1_RightingResponse_6C.csv")
-names(right_6)
-sapply(right_6, class)
-right_6$Block=as.factor(right_6$Block)
-sapply(right_6, class)
-
-plot(ResponseTime~Site+Sex+Block+CW..mm., data=right_6)
-
-#KM Curves of main effects
-main_6=survfit(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_6)
-plot(main_6, ylab='Righting Probability', xlab='Response Time', main='6 C') #disregard this
-
-#Log Rank test of main effects tests for differences
-main_6_dif=survdiff(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_6)
-main_6_dif
-
+Figure 7: Sublethal Region
+```{r, echo=F}
+#Log Rank test 
+survdiff(Surv(Duration,Status)~Block+Region, data=KM_Righting)
 #Cox proportional hazards model fit
-main_6_cox=coxph(Surv(ResponseTime,Status)~Block+Site+Sex, data=right_6)
-summary(main_6_cox)
-
-#ANOVA of main effects 
-anova(main_6_cox)
+summary(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
+#ANCOVA of main effects 
+anova(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
 ```
 
+Figure 8: Sublethal Sex
+```{r, echo=F}
+#Log Rank test 
+survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
+#Cox proportional hazards model fit
+summary(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
+#ANCOVA of main effects 
+anova(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
+```
 
+Figure 9: Sublethal Sex by Region
+```{r, echo=F}
+#Log Rank
+survdiff(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting)
+#Cox proportional hazards model fit
+summary(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
+#ANOVA
+anova(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
+```
+
+Figure 10: Sublethal Size Regression
+```{r, echo=F}
+#subset
+lethal_males=subset(KM_Righting, Sex == 'Male')
+lethal_females=subset(KM_Righting, Sex == 'Female')
+
+#Regression
+summary(lm(CW~Duration, data=lethal_males))
+summary(lm(CW~Duration, data=lethal_females))
