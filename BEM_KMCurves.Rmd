@@ -1,0 +1,294 @@
+---
+title: "KM Log Rank"
+author: "Kevin Mack"
+date: "Tuesday, January 19, 2016"
+output: html_document
+---
+```{r, echo=F}
+KM_Survival <- read.csv("~/Incubation Analysis/Trial1_survival.csv")
+
+library(survival)
+
+
+#this will be for making pretty curves
+#First lets define all of my objects
+
+BlyCreek=subset(KM_Survival, Site =="Bly Creek")
+TownCreek=subset(KM_Survival, Site =="Town Creek")
+Grice=subset(KM_Survival, Site =="Grice")
+Bowens=subset(KM_Survival, Site =="Bowens Island")
+Trask=subset(KM_Survival, Site =="Trask")
+Pinckney=subset(KM_Survival, Site =="Pinckney")
+ExOffice=subset(KM_Survival, Site =="Extension Office")
+RobHouse=subset(KM_Survival, Site =="Roebling House")
+Baruch=subset(KM_Survival, Location == "Baruch")
+Charleston=subset(KM_Survival, Location == "Charleston")
+HiltonHead=subset(KM_Survival, Location == "Hilton Head")
+Savannah=subset(KM_Survival, Location == "Savannah")
+North=subset(KM_Survival, Region == "North")
+South=subset(KM_Survival, Region == "South")
+Male=subset(KM_Survival, Sex =="Male")
+Female=subset(KM_Survival, Sex =="Female")
+
+
+bc=survfit(Surv(Duration[Site=="Bly Creek"], Status[Site=="Bly Creek"])~1, data=KM_Survival)
+tc=survfit(Surv(Duration[Site=="Town Creek"], Status[Site=="Town Creek"])~1, data=KM_Survival)
+grice=survfit(Surv(Duration[Site=="Grice"], Status[Site=="Grice"])~1, data=KM_Survival)
+bowens=survfit(Surv(Duration[Site=="Bowens Island"], Status[Site=="Bowens Island"])~1, data=KM_Survival)
+trask=survfit(Surv(Duration[Site=="Trask"], Status[Site=="Trask"])~1, data=KM_Survival)
+pinckney=survfit(Surv(Duration[Site=="Pinckney"], Status[Site=="Pinckney"])~1, data=KM_Survival)
+mex=survfit(Surv(Duration[Site=="Extension Office"], Status[Site=="Extension Office"])~1, data=KM_Survival)
+rh=survfit(Surv(Duration[Site=="Roebling House"], Status[Site=="Roebling House"])~1, data=KM_Survival)
+baruch=survfit(Surv(Duration[Location == "Baruch"], Status[Location == "Baruch"])~1, data=KM_Survival)
+chareleston=survfit(Surv(Duration[Location == "Charleston"], Status[Location == "Charleston"])~1, data=KM_Survival)
+hilton=survfit(Surv(Duration[Location == "Hilton Head"], Status[Location == "Hilton Head"])~1, data=KM_Survival)
+sav=survfit(Surv(Duration[Location == "Savannah"], Status[Location == "Savannah"])~1, data=KM_Survival)
+north = survfit(Surv(Duration[Region == "North"], Status[Region == "North"])~1, data=KM_Survival)
+south = survfit(Surv(Duration[Region == "South"], Status[Region == "South"])~1, data=KM_Survival)
+male=survfit(Surv(Duration[Sex=="Male"], Status[Sex=="Male"])~1, data=KM_Survival)
+female=survfit(Surv(Duration[Sex=="Female"], Status[Sex=="Female"])~1, data=KM_Survival)
+
+bc_f=survfit(Surv(Duration[Site=="Bly Creek"], Status[Site=="Bly Creek"])~1, data=Female)
+tc_f=survfit(Surv(Duration[Site=="Town Creek"], Status[Site=="Town Creek"])~1, data=Female)
+grice_f=survfit(Surv(Duration[Site=="Grice"], Status[Site=="Grice"])~1, data=Female)
+bowens_f=survfit(Surv(Duration[Site=="Bowens Island"], Status[Site=="Bowens Island"])~1, data=Female)
+trask_f=survfit(Surv(Duration[Site=="Trask"], Status[Site=="Trask"])~1, data=Female)
+pinckney_f=survfit(Surv(Duration[Site=="Pinckney"], Status[Site=="Pinckney"])~1, data=Female)
+mex_f=survfit(Surv(Duration[Site=="Extension Office"], Status[Site=="Extension Office"])~1, data=Female)
+rh_f=survfit(Surv(Duration[Site=="Roebling House"], Status[Site=="Roebling House"])~1, data=Female)
+
+bc_m=survfit(Surv(Duration[Site=="Bly Creek"], Status[Site=="Bly Creek"])~1, data=Male)
+tc_m=survfit(Surv(Duration[Site=="Town Creek"], Status[Site=="Town Creek"])~1, data=Male)
+grice_m=survfit(Surv(Duration[Site=="Grice"], Status[Site=="Grice"])~1, data=Male)
+bowens_m=survfit(Surv(Duration[Site=="Bowens Island"], Status[Site=="Bowens Island"])~1, data=Male)
+trask_m=survfit(Surv(Duration[Site=="Trask"], Status[Site=="Trask"])~1, data=Male)
+pinckney_m=survfit(Surv(Duration[Site=="Pinckney"], Status[Site=="Pinckney"])~1, data=Male)
+mex_m=survfit(Surv(Duration[Site=="Extension Office"], Status[Site=="Extension Office"])~1, data=Male)
+rh_m=survfit(Surv(Duration[Site=="Roebling House"], Status[Site=="Roebling House"])~1, data=Male)
+
+temps=c(12,11,10,9,8,7,6,5,4,3,2,3,4,5,6,7,8,9)
+days=c(0,24,48,72,96,120,144,168,192,216,240,264,288,312,336,360,384,408)
+
+```
+
+
+```{r, echo=F}
+#LETHAL FIGS
+#SITE
+par(pin=c(8.44,5.93), mai=c(1.3,1.3,1.5,0.4), oma=c(0,0,0,0))
+plot(bc,conf.int='none', col = 'dodgerblue3', lwd=3, lty=c(1), cex.axis=1.5, xlab ='Time (hours)', ylab = 'Survival Probability', cex.lab=2)
+mtext("Temperature",3,line=4,at=200, cex=2)
+axis(3,days,labels=temps,line=1)
+lines(tc,conf.int='none', col = 'dodgerblue3', lwd=3, lty=c(1))
+lines(grice,conf.int='none', col = 'deepskyblue1', lwd=3, lty=c(1))
+lines(bowens,conf.int='none', col = 'deepskyblue1', lwd=3, lty=c(1))
+lines(trask,conf.int='none', col = 'red', lwd=3, lty=c(1))
+lines(pinckney,conf.int='none', col = 'red',lwd=3, lty=c(1))
+lines(mex,conf.int='none', col = 'firebrick4',lwd=3, lty=c(1))
+lines(rh,conf.int='none', col = 'firebrick4',lwd=3, lty=c(1))
+legend(x='bottomleft',c('Baruch', 'Charleston','Bluffton','Savannah'), col=c('dodgerblue3', 'deepskyblue1','red', 'firebrick4'),lwd=3, lty=c(1,1,1,1), cex=1.5)
+
+#REGION
+plot(north, conf.int='none', col='dodgerblue3', lwd=3, lty=c(1),cex.axis=1.5, xlab='Time (hours)', ylab = 'Survival Probability', cex.lab=2)
+mtext("Temperature",3,line=4,at=200, cex=2)
+axis(3,days, labels=temps,line=1)
+lines(south,conf.int='none', col='firebrick4', lwd=3, lty=c(1) )
+legend(x='bottomleft',c('North', 'South'),col= c('dodgerblue3','firebrick4'),lwd=3,lty=c(1,1),cex=1.5)
+
+#SEX
+ plot(male,conf.int='none', col = 'black', lty=c(3), lwd=3, cex.axis=1.5, xlab =
+'Time (hours)', ylab = 'Survival Probability', cex.lab=2)
+mtext("Temperature",3,line=4,at=200, cex=2)
+axis(3,days, labels=temps,line=1)
+lines(female,conf.int='none', col = 'black', lwd=3, lty=c(1))
+legend(x='bottomleft',c('Females', 'Males'),col='black',lwd=3,lty=c(1,3), cex=1.5)
+
+#sexes by Region
+north_sex=survfit(Surv(Duration, Status)~Sex, data=North)
+south_sex=survfit(Surv(Duration, Status)~Sex, data=South)
+plot(north_sex, col= c('dodgerblue3'), lty=c(1,3), lwd=2, cex.axis=1.25, xlab='Time (hours)', ylab = 'Survival Probability', cex.lab=1.4)
+mtext("Temperature",3,line=4,at=200, cex=1.4)
+axis(3,days, labels=temps,line=1)
+lines(south_sex, col= c('darkolivegreen'), lty=c(1,3), lwd=2)
+legend(x='bottomleft',c('North: Female', 'North: Male', 'South: Female', 'South: Male'),col= c('goldenrod3', 'goldenrod3', 'darkolivegreen', 'darkolivegreen'),lwd=2,lty=c(1,3,1,3))
+
+#Size
+par(pin=c(8.44,5.93), mai=c(1.3,1.3,0.4,0.4), oma=c(0,0,0,0))
+plot(CW~Duration, data = Male, cex.axis=1.25, xlab='Time (hours)', ylab = 'Carapace Width (mm)', cex.lab=1.4 )
+abline(lm(CW~Duration, data=Male), , lty=c(3), lwd=2)
+points(CW~Duration, data=Female, pch=19)
+abline(lm(CW~Duration, data=Female), , lty=c(1), lwd=2)
+legend(x='bottomleft',c('Female', 'Male'),lwd=2,lty=c(1,3),pch=c(19,1))
+```
+
+
+
+
+
+
+
+ANALYSIS FIGS
+
+```{r}
+#All Blocks by Region
+plot(north, conf.int='none', col='red', lty=c(1), xlab='Time (hours)', ylab = 'Survival Probability')
+lines(south,conf.int='none', col='green', lty=c(1) )
+title(main='KM-Curves: Region')
+legend(x='bottomleft',c('North', 'South'),col= c('red','green'),lwd=1,lty=c(1))
+
+#Females by Region
+plot(survfit(Surv(Duration, Status)~Region, data=Female), col= c('red','green'), lty=c(1), xlab='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Females')
+legend(x='bottomleft',c('North', 'South'),col= c('red','green'),lwd=1,lty=c(1))
+tapply(Female$Duration, Female$Region, mean )
+
+#Males by Region
+plot(survfit(Surv(Duration, Status)~Region, data=Male), col= c('red','green'), lty=c(1), xlab='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Males')
+legend(x='bottomleft',c('North', 'South'),col= c('red','green'),lwd=1,lty=c(1))
+tapply(Female$Duration, Female$Region, mean )
+
+
+#sexes by Region
+plot(survfit(Surv(Duration, Status)~Region+Sex, data=KM_Survival), col= c('red','green'), lty=c(1), xlab='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Females')
+legend(x='bottomleft',c('North', 'South'),col= c('red','green'),lwd=1,lty=c(1))
+tapply(Female$Duration, Female$Region, mean )
+
+```
+
+
+
+
+
+
+
+```{r}
+#Plotting Survivor Curves
+#All Blocks by Sex
+ plot(male,conf.int='none', col = 'black', lty=c(1), xlab =
+'Time (hours)', ylab = 'Survival Probability')
+lines(female,conf.int='none', col = 'black', lty=c(2))
+title(main='KM-Curves: Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='black',lwd=1,lty=c(2,1))
+
+#All Blocks by Site
+ plot(bc,conf.int='none', col = 'red3', xlab ='Time (hours)', ylab = 'Survival Probability')
+lines(tc,conf.int='none', col = 'red3')
+lines(grice,conf.int='none', col = 'red')
+lines(bowens,conf.int='none', col = 'red')
+lines(trask,conf.int='none', col = 'green3')
+lines(pinckney,conf.int='none', col = 'green3')
+lines(mex,conf.int='none', col = 'green')
+lines(rh,conf.int='none', col = 'green')
+title(main='KM-Curves: Site')
+legend(x='bottomleft',c('Bly Creek', 'Town Creek','Grice','Bowens Island','Trask','Pinckney','Extension Office','Roebling House'),col=c('red3','red3','red','red','green3','green3','green','green'),lwd=1, lty=c(1))
+
+```
+
+```{r}
+#Further examination
+#All Blocks, All Sites, Females
+plot(survfit(Surv(Duration,Status)~Site, data=Female)) #like this but pretty
+
+plot(bc_f,conf.int='none', col='blue', lty=c(2), lwd=2, xlab ='Time (hours)', ylab = 'Survival Probability')
+lines(tc_f,conf.int='none', col = 'blue', lty=c(2), lwd=2)
+lines(grice_f,conf.int='none', col = 'red', lty=c(2), lwd=2)
+lines(bowens_f,conf.int='none', col = 'red', lty=c(2), lwd=2)
+lines(trask_f,conf.int='none', col = 'darkgreen', lty=c(2), lwd=2)
+lines(pinckney_f,conf.int='none', col = 'darkgreen', lty=c(2), lwd=2)
+lines(mex_f,conf.int='none', col = 'darkorange4', lty=c(2), lwd=2)
+lines(rh_f,conf.int='none', col = 'darkorange4', lty=c(2), lwd=2)
+title(main='KM-Curves: All Sites, Females')
+legend(x='bottomleft',c('Bly Creek', 'Town Creek','Grice','Bowens Island','Trask','Pinckney','Extension Office','Roebling House'),col=c('blue','blue','red','red','darkgreen','darkgreen','darkorange4','darkorange4'),lwd=2, lty=c(2))
+
+#All Blocks, All Sites, Males
+plot(survfit(Surv(Duration,Status)~Site, data=Male)) # like this but pretty
+
+plot(bc_m,conf.int='none', col='blue', lty=c(1), lwd=2, xlab ='Time (hours)', ylab = 'Survival Probability')
+lines(tc_m,conf.int='none', col = 'blue', lty=c(1), lwd=2)
+lines(grice_m,conf.int='none', col = 'red', lty=c(1), lwd=2)
+lines(bowens_m,conf.int='none', col = 'red', lty=c(1), lwd=2)
+lines(trask_m,conf.int='none', col = 'darkgreen', lty=c(1), lwd=2)
+lines(pinckney_m,conf.int='none', col = 'darkgreen', lty=c(1), lwd=2)
+lines(mex_m,conf.int='none', col = 'darkorange4', lty=c(1), lwd=2)
+lines(rh_m,conf.int='none', col = 'darkorange4', lty=c(1), lwd=2)
+title(main='KM-Curves: All Sites, Males')
+legend(x='bottomleft',c('Bly Creek', 'Town Creek','Grice','Bowens Island','Trask','Pinckney','Extension Office','Roebling House'),col=c('blue','blue','red','red','darkgreen','darkgreen','darkorange4','darkorange4'),lwd=2, lty=c(1))
+
+```
+
+
+```{r}
+# Further breakdown of each sex at each site individually
+# Bly Creek, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=BlyCreek), col='blue', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Bly Creek, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='blue',lwd=1,lty=c(2,1))
+
+#Town Creek, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=TownCreek), col='blue', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Town Creek, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='blue',lwd=1,lty=c(2,1))
+
+#Grice, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=Grice), col='red', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Grice, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='red',lwd=1,lty=c(2,1))
+
+#Bowens, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=Bowens), col='red', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Bowens Island, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='red',lwd=1,lty=c(2,1))
+
+#Pinckney, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=Pinckney), col='darkgreen', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Pinckney, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='darkgreen',lwd=1,lty=c(2,1))
+
+#Trask, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=Trask), col='darkgreen', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Trask, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='darkgreen',lwd=1,lty=c(2,1))
+
+#Extension Office, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=ExOffice), col='darkorange4', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Extension Office, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='darkorange4',lwd=1,lty=c(2,1))
+
+#Roebling House, By Sex
+plot(survfit(Surv(Duration,Status)~Sex, data=RobHouse), col='darkorange4', lty=c(2,1), lwd=c(2,1),xlab ='Time (hours)', ylab = 'Survival Probability')
+title(main='KM-Curves: Roebling House, Sex')
+legend(x='bottomleft',c('Females', 'Males'),col='darkorange4',lwd=1,lty=c(2,1))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
