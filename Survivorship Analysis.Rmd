@@ -31,7 +31,7 @@ drop1(fit1,~.,test='F')
 plot(KM_Survival$Sex, KM_Survival$Duration)
 plot(KM_Survival$Site, KM_Survival$Duration)
 plot(KM_Survival$CW,KM_Survival$Duration)
-plot(KM_Survival$Duration, KM_Survival$CW )
+plot(KM_Survival$Duration, KM_Survival$CW ) #closley related to sex. Examine males and females separetely?
 plot(Males$CW, Males$Duration)
 plot(Females$CW, Females$Duration)
 
