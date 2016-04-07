@@ -4,7 +4,7 @@ author: "Kevin Mack"
 date: "4/4/2016"
 output: pdf_document
 ---
-```{r}
+```{r,echo=F}
 KM_Survival <- read.csv("~/Applied Quant Project/Survival/Trial1_survival.csv")
 library(survival)
 
@@ -41,7 +41,7 @@ Female=subset(KM_Survival, Sex =="Female")
 ```
 
 Figure 1: Lethal Site
-```{r}
+```{r,echo=F}
 palette(c('dodgerblue3','dodgerblue3', 'deepskyblue1', 'deepskyblue1', 'red', 'firebrick4', 'firebrick4', 'red'))
 plot(mod_sites[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', lwd=3)
 for(i in seq_along(mod_sites))
@@ -50,28 +50,28 @@ legend(x='bottomleft',c('Baruch', 'Charleston','Bluffton','Savannah'), col=c('do
 ```
 
 Figure 2: Lethal Region
-```{r}
+```{r,echo=F}
 plot(mod_region[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', col='dodgerblue3', lwd=3)
 lines(mod_region[[2]],conf.int='none', col='firebrick4', lwd=3) 
 legend(x='bottomleft',c('North', 'South'),col= c('dodgerblue3','firebrick4'),lwd=3,lty=c(1,1))
 ```
 
 Figure 3: Lethal Sex
-```{r}
+```{r,echo=F}
 plot(mod_sex[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', lwd=3, col='black', lty=3 )
 lines(mod_sex[[2]],conf.int='none', col = 'black', lwd=3, lty = 1) 
 legend(x='bottomleft',c('Females', 'Males'),col='black',lwd=3,lty=c(1,3))
 ```
 
 Figure 4: Lethal Sex by Region
-```{r}
+```{r,echo=F}
 plot(north_sex, col= c('dodgerblue3'), lty=c(1,3), lwd=3, xlab='Time (hours)', ylab = 'Survival Probability')
 lines(south_sex, col= c('firebrick4'), lty=c(1,3), lwd=3)
 legend(x='bottomleft',c('North: Female', 'North: Male', 'South: Female', 'South: Male'),col= c('dodgerblue3', 'dodgerblue3', 'firebrick4', 'firebrick4'),lwd=3,lty=c(1,3,1,3))
 ```
 
 Figure 5: Size
-```{r}
+```{r,echo=F}
 plot(CW~Duration, data = Male, cex.axis=1.25, xlab='Time (hours)', ylab = 'Carapace Width (mm)')
 abline(lm(CW~Duration, data=Male), , lty=c(3), lwd=2)
 points(CW~Duration, data=Female, pch=19)
