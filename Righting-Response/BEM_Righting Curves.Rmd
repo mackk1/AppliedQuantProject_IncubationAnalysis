@@ -5,7 +5,7 @@ date: "3/2/2016"
 output: html_document
 ---
 ```{r, echo=F}
-KM_Righting <- read.csv("~/Incubation Analysis/Trial1_sublethal.csv")
+KM_Righting <- read.csv("~/Applied Quant Project/Righting-Response/Trial1_sublethal.csv")
 library(survival)
 
 
