@@ -7,9 +7,9 @@ output: pdf_document
 
 Preliminary Analysis
 --
-This is preliminary/esploratory analysis of sublethal righting responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that the covariate CW was the strongest effect. There were no significant interactions.
+This is preliminary/exploratory analysis of sublethal righting responses of _P. armatus_. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that the covariate CW was the strongest effect. There were no significant interactions.
 ```{r}
-KM_Righting <- read.csv("~/Applied Quant Project/Trial1_sublethal.csv")
+KM_Righting <- read.csv("~/Applied Quant Project/Righting-Response/Trial1_sublethal.csv")
 KM_Righting$Block=as.factor(KM_Righting$Block)
 library(survival)
 
@@ -30,12 +30,12 @@ plot(KM_Righting$Duration, KM_Righting$CW )
 
 Analysis of Main Effects
 --
-This is analysis of righting responses of P. armatus. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves for righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects, which were tested with ANOVA.
+This is analysis of righting responses of _P. armatus_. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves for righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects. This helped me determine how to present differences between my main effects.
 ```{r}
 #KM Curves of main effects
 rr_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
 plot(rr_mod1, ylab='Survival Probability', xlab='Duration') 
-#disregard this figure is not for publication
+#disregard, this figure is not for publication but 
 
 #Log Rank test of main effects tests for differences
 rr_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
@@ -45,13 +45,14 @@ rr_mod1_dif
 rr_mod1_cox=coxph(Surv(Duration,Status)~Block+Site+Sex+CW, data=KM_Righting)
 summary(rr_mod1_cox)
 
-#ANOVA of main effects 
+#ANOVA of main effects, Useful for checking results 
 anova(rr_mod1_cox)
 ```
 
+
 Analysis of Spatial Scale
 --
-The following is analysis of righting responses of P. armatus at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in righting response. Differences in righting response exist between sites, locations, and regions.
+The following is analysis of righting responses of _P. armatus_ at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in righting response. Differences in righting response exist between sites, locations, and regions.
 ```{r}
 ##Analysis by SITE
 #KM Curves of main effects
