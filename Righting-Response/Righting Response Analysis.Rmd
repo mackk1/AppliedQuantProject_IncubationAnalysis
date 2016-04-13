@@ -2,7 +2,7 @@
 title: "BEM_RightingResponse"
 author: "Kevin Mack"
 date: "2/18/2016"
-output: pdf_document
+output: word_document
 ---
 
 Preliminary Analysis

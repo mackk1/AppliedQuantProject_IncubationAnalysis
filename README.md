@@ -3,11 +3,11 @@ Repository for analysis of lethal and sublethal responses of _P. armatus_ to col
 
 **Index:**
 
-1. Survival:
+./Survival/
 
-     1.  Survival dataset (.csv)
-     2.  Survival analysis (.rmd)
-     3.  Survival figures (.rmd)
+    ./Trial1_survival.csv - lethal results dataset
+    ./Survival_Analysis.Rmd - analysis of lethal results
+    ./Survival_Figures.Rmd - generation of survival curves)
 2. Righting Response
 
      1. Righting Response dataset (.csv)

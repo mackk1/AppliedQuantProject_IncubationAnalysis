@@ -71,7 +71,7 @@ legend(x='bottomleft',c('North: Female', 'North: Male', 'South: Female', 'South:
 ```
 
 Figure 10: Size
-```{r,echo=F}
+```{r,echo=F, tidy=T}
 plot(CW~Duration, data = Male, cex.axis=1.25, xlab='Time (hours)', ylab = 'Carapace Width (mm)')
 abline(lm(CW~Duration, data=Male), , lty=c(3), lwd=2)
 points(CW~Duration, data=Female, pch=19)
