@@ -3,18 +3,21 @@ Repository for analysis of lethal and sublethal responses of _P. armatus_ to col
 
 **Index:**
 
+./Righting-Response/
+    ./Figures/ - contains all figures of sublethal responses
+    ./Righting Response Analysis.Rmd - analysis of sublethal results
+    ./Righting Response Figures.Rmd - generation of righting response figures
+    ./Trial1_sublethal.scv - sublethal results dataset
 ./Survival/
-
+    ./Figures/ - contains all figures of lethal responses
+    ./Survival Analysis.Rmd - analysis of lethal results
+    ./Survival Figures.Rmd - generation of survival figures
     ./Trial1_survival.csv - lethal results dataset
-    ./Survival_Analysis.Rmd - analysis of lethal results
-    ./Survival_Figures.Rmd - generation of survival curves)
-2. Righting Response
+./README
 
-     1. Righting Response dataset (.csv)
-     2. Righting Response analysis (.rmd)
-     3. Righting Response figures (.rmd)
+**Use:**
 
-3. README
+Conducting analysis for both Righting Response and Survival is very similar.  Both include two markdown files, one for conducting the overall analysis and another for generating publication figures. Each analysis.Rmd walks through four basic steps: (1)an exploratory analysis, (2)an analysis of main effects, (3) an analysis of spatial scales, and (4) in-depth analysis for individual figures. Each figures.Rmd generates five figures. 
 
 **Abstract:**
 
