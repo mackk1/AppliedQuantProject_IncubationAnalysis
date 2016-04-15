@@ -41,6 +41,7 @@ Female=subset(KM_Survival, Sex =="Female")
 ```
 
 Figure 1: Lethal Site
+Kaplan Meier curve of survival probability in P. armatus from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 55.6, p < 0.001
 ```{r,echo=F}
 palette(c('dodgerblue3','dodgerblue3', 'deepskyblue1', 'deepskyblue1', 'red', 'firebrick4', 'firebrick4', 'red'))
 plot(mod_sites[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', lwd=3)
@@ -50,6 +51,7 @@ legend(x='bottomleft',c('Baruch', 'Charleston','Bluffton','Savannah'), col=c('do
 ```
 
 Figure 2: Lethal Region
+Kaplan Meier curve of survival probability in P. armatus from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 31.5, p < 0.001
 ```{r,echo=F}
 plot(mod_region[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', col='dodgerblue3', lwd=3)
 lines(mod_region[[2]],conf.int='none', col='firebrick4', lwd=3) 
@@ -57,6 +59,7 @@ legend(x='bottomleft',c('North', 'South'),col= c('dodgerblue3','firebrick4'),lwd
 ```
 
 Figure 3: Lethal Sex
+Kaplan Meier curve of survival probability in P. armatus females and males during cold temperature trial. Log-Rank test: X2 = 54.9, p < 0.001.
 ```{r,echo=F}
 plot(mod_sex[[1]],conf.int='none', xlab ='Time (hours)', ylab = 'Survival Probability', lwd=3, col='black', lty=3 )
 lines(mod_sex[[2]],conf.int='none', col = 'black', lwd=3, lty = 1) 
@@ -71,8 +74,9 @@ legend(x='bottomleft',c('North: Female', 'North: Male', 'South: Female', 'South:
 ```
 
 Figure 5: Size
+Carapace width (mm) of P. armatus plotted by time of righting response loss for females (R2 = 0.00, p = 0.88) and males (R2 = 0.10, p < 0.001 ) during cold temperature trial.
 ```{r,echo=F}
-plot(CW~Duration, data = Male, cex.axis=1.25, xlab='Time (hours)', ylab = 'Carapace Width (mm)')
+plot(CW~Duration, data = Male, xlab='Time (hours)', ylab = 'Carapace Width (mm)')
 abline(lm(CW~Duration, data=Male), , lty=c(3), lwd=2)
 points(CW~Duration, data=Female, pch=19)
 abline(lm(CW~Duration, data=Female), , lty=c(1), lwd=2)
