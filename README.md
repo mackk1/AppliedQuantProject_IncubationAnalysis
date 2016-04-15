@@ -14,7 +14,8 @@ Conducting analysis for both sub-lethal (righting response) and lethal (survival
   * ./Survival Analysis.Rmd - analysis of lethal results
   * ./Survival Figures.Rmd - generation of survival figures
   * ./Trial1_survival.csv - lethal results dataset
-3. ./README
+3. ./Applied Quant_Incubation Analysis.docx - written manuscript
+4. ./README
 
 **Abstract:**
 The green porcelain crab, _Petrolisthes armatus_, is an intertidal anomuran crab with a native
