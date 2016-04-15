@@ -123,7 +123,8 @@ anova(region_righting_cox)
 Analysis of Presentation Figures
 --
 The following is analysis of each of the presentation figures
-Figure 6: Sublethal Site
+Figure 1: Sublethal Site
+Kaplan Meier curve of righting probability in P. armatus from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 20.4, p = 0.617
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Site, data=KM_Righting)
@@ -134,7 +135,8 @@ anova(coxph(Surv(Duration,Status)~Block+Site, data=KM_Righting))
 
 ```
 
-Figure 7: Sublethal Region
+Figure 2: Sublethal Region
+Kaplan Meier curve of righting probability in P. armatus from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 10.4, p = 0.064
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Region, data=KM_Righting)
@@ -144,7 +146,8 @@ summary(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
 anova(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
 ```
 
-Figure 8: Sublethal Sex
+Figure 3: Sublethal Sex
+
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
@@ -154,7 +157,8 @@ summary(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
 anova(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
 ```
 
-Figure 9: Sublethal Sex by Region
+Figure 4: Sublethal Sex by Region
+Kaplan Meier curve of righting probability in P. armatus females and males during cold temperature trial. Log-Rank test: X2 = 15.9, p < 0.01
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting)
@@ -164,7 +168,8 @@ summary(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
 anova(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
 ```
 
-Figure 10: Sublethal Size Regression
+Figure 5: Sublethal Size Regression
+Carapace width (mm) of P. armatus plotted by time of righting response loss for females (R2 = 0.036, p <0.05) and males (R2 = 0.062, p < 0.01 ) during cold temperature trial. 
 ```{r, echo=F}
 #subset
 lethal_males=subset(KM_Righting, Sex == 'Male')
