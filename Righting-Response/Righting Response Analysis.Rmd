@@ -123,7 +123,7 @@ The following is more in depth analysis for each publication figure generated to
 
 
 Figure 1: Sublethal Site
-Kaplan Meier curve of righting probability in P. armatus from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 20.4, p = 0.617
+Kaplan Meier curve of righting probability in _P. armatus_ from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 20.4, p = 0.617
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Site, data=KM_Righting)
@@ -135,7 +135,7 @@ anova(coxph(Surv(Duration,Status)~Block+Site, data=KM_Righting))
 ```
 
 Figure 2: Sublethal Region
-Kaplan Meier curve of righting probability in P. armatus from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 10.4, p = 0.064
+Kaplan Meier curve of righting probability in _P. armatus_ from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 10.4, p = 0.064
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Region, data=KM_Righting)
@@ -144,7 +144,7 @@ summary(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
 ```
 
 Figure 3: Sublethal Sex
-Kaplan Meier curve of righting probability in P. armatus females and males during cold temperature trial. Log-Rank test: X2 = 15.9, p < 0.01
+Kaplan Meier curve of righting probability in _P. armatus_ females and males during cold temperature trial. Log-Rank test: X2 = 15.9, p < 0.01
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
@@ -153,7 +153,7 @@ summary(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
 ```
 
 Figure 4: Sublethal Sex by Region
-Kaplan Meier curve of righting probability in P. armatus females and males from Northern or Southern sites during cold temperature trial. Log-Rank test: X2 = 22.1, p < 0.05
+Kaplan Meier curve of righting probability in _P. armatus_ females and males from Northern or Southern sites during cold temperature trial. Log-Rank test: X2 = 22.1, p < 0.05
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting)
@@ -162,7 +162,7 @@ summary(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
 ```
 
 Figure 5: Sublethal Size Regression
-Carapace width (mm) of P. armatus plotted by time of righting response loss for females (R2 = 0.036, p <0.05) and males (R2 = 0.062, p < 0.01 ) during cold temperature trial. 
+Carapace width (mm) of _P. armatus_ plotted by time of righting response loss for females (R2 = 0.036, p <0.05) and males (R2 = 0.062, p < 0.01 ) during cold temperature trial. 
 ```{r, echo=F}
 #subset
 lethal_males=subset(KM_Righting, Sex == 'Male')

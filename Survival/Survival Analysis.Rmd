@@ -7,7 +7,7 @@ output: pdf_document
 
 Preliminary Analysis
 --
-The following is preliminary/exploratory analysis of lethal responses of P. armatus. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that Sex was the strongest effect, followed by the covariate Carapace Width, and Site. There were no significant interactions.
+The following is preliminary/exploratory analysis of lethal responses of _P. armatus_. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that Sex was the strongest effect, followed by the covariate CW, and Site. There were no significant interactions. This analysis informed the next analysis of main effects.
 ```{r}
 KM_Survival <- read.csv("~/Applied Quant Project/Survival/Trial1_survival.csv")
 KM_Survival$Block=as.factor(KM_Survival$Block)
@@ -28,12 +28,11 @@ plot(KM_Survival$Duration, KM_Survival$CW )
 
 Analysis of Main Effects
 --
-The following is analysis of lethal responses of P. armatus. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects, which were tested with ANOVA. A significant block effect was detected. Significant differences in survival were detected for all the main effects.
+The following is analysis of lethal responses of _P. armatus_. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects, which were further summarized with ANOVA. A significant block effect was detected. Significant differences in survival were detected for all the main effects.
 ```{r}
 #KM Curves of main effects
 let_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
 plot(let_mod1, ylab='Survival Probability', xlab='Duration') 
-#disregard, this figure is not for publication
 
 #Log Rank test of main effects tests for differences
 let_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
@@ -49,13 +48,12 @@ anova(let_mod1_cox)
 
 Analysis of Spatial Scale
 --
-The following is analysis of lethal responses of P. armatus at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in survival. Differences in survival exist between sites, and regions, but were not detcted between locations.
+The following is analysis of lethal responses of _P. armatus_ at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in survival. Differences in survival exist between sites, and regions, but were not detcted between locations. Based on this analysis data can be summarized by region, North vs South.
 ```{r}
 ##Analysis by SITE
 #KM Curves of main effects
 let_site=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
-plot(let_site, ylab='survival probabilty', xlab='Duration', main='Model 1') 
-#disregard figure
+plot(let_site, ylab='survival probabilty', xlab='Duration', main='Site') 
 
 #Log Rank test of main effects tests for differences
 let_site_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Survival)
@@ -73,8 +71,7 @@ anova(let_site_cox)
 ##Analysis by LOCATION
 #KM Curves of main effects
 let_location=survfit(Surv(Duration,Status)~Block+Location+Sex, data=KM_Survival)
-plot(let_location, ylab='righting probabilty', xlab='Duration', main='Model 1')
-#disregard everything
+plot(let_location, ylab='righting probabilty', xlab='Duration', main='Location')
 
 #Log Rank test of main effects tests for differences
 let_location_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex, 
@@ -94,8 +91,7 @@ anova(let_location_cox)
 ##Analysis by REGION
 #KM Curves of main effects
 let_region=survfit(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
-plot(let_region, ylab='survival probabilty', xlab='Duration', main='Model 1')
-#disregard everything
+plot(let_region, ylab='survival probabilty', xlab='Duration', main='Region')
 
 #Log Rank test of main effects tests for differences
 let_region_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, data=KM_Survival)
@@ -115,46 +111,43 @@ Analysis of Presentation Figures
 The following is analysis of each of the presentation figures
 
 Figure 1: Lethal Site
+Kaplan Meier curve of survival probability in _P. armatus_ from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 55.6, p < 0.001.
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Site, data=KM_Survival)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Site, data=KM_Survival))
-#ANCOVA
-anova(coxph(Surv(Duration,Status)~Block+Site, data=KM_Survival))
 ```
 
 Figure 2: Lethal Region
+Kaplan Meier curve of survival probability in _P. armatus_ from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 31.5, p < 0.001.
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Region, data=KM_Survival)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Region, data=KM_Survival))
-#ANOVA
-anova(coxph(Surv(Duration,Status)~Block+Region, data=KM_Survival))
 ```
 
 Figure 3: Lethal Sex
+Kaplan Meier curve of survival probability in _P. armatus_ females and males during cold temperature trial. Log-Rank test: X2 = 54.9, p < 0.001.
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Survival)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Survival))
-#ANOVA
-anova(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Survival))
 ```
 
 Figure 4: Lethal Sex by Region
+Kaplan Meier curve of survival probability in P. armatus females and males from Northern and Southern sites during cold temperature trial. Log-Rank test: X2 = 61.6, p < 0.001.
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Sex+Region, data=KM_Survival)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Survival))
-#ANOVA
-anova(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Survival))
 ```
 
 Figure 5: Lethal Size Regression
+Carapace width (mm) of _P. armatus_ plotted by time of righting response loss for females (R2 = 0.00, p = 0.88) and males (R2 = 0.10, p < 0.001) during cold temperature trial.
 ```{r, echo=F}
 #subset
 lethal_males=subset(KM_Survival, Sex == 'Male')
