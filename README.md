@@ -14,7 +14,8 @@ Conducting analysis for both sub-lethal (righting response) and lethal (survival
   * ./Survival Analysis.Rmd - analysis of lethal results
   * ./Survival Figures.Rmd - generation of survival figures
   * ./Trial1_survival.csv - lethal results dataset
-3. ./README
+3. ./Applied Quant_Incubation Analysis.docx - written manuscript
+4. ./README
 
 **Abstract:**
 The green porcelain crab, _Petrolisthes armatus_, is an intertidal anomuran crab with a native
@@ -26,7 +27,7 @@ winter temperatures, although the mechanism is not well understood. Crabs collec
 locations within the species&#39; northernmost invaded range from Savannah, GA to Wilmington, NC
 were used in incubation trials to determine whether cold temperatures experienced by adults
 induce different sublethal (loss of righting response) or lethal effects among locations, between
-crab size categories, or between sexes. Following an acclimation period, crabs were exposed to a
+crab sizes, or between sexes. Following an acclimation period, crabs were exposed to a
 chronic cold temperature trial informed by the January 2014 cold snap in Charleston Harbor, SC.
 Crabs from more northerly locations survived significantly longer as temperatures decreased.
 Regardless of location, females survived and maintained the righting response longer than males.
