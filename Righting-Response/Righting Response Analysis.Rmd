@@ -2,12 +2,12 @@
 title: "BEM_RightingResponse"
 author: "Kevin Mack"
 date: "2/18/2016"
-output: word_document
+output: html_document
 ---
 
 Preliminary Analysis
 --
-This is preliminary/exploratory analysis of sublethal righting responses of _P. armatus_. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that the covariate CW was the strongest effect. There were no significant interactions.
+This is preliminary/exploratory analysis of sublethal righting responses of _P. armatus_. I ran an ANCOVA and on the main effects: site, sex, and block with crab size (CW) as a covariate. A significant block effect was detected. This prelimary analysis indicates that the covariate CW was the strongest effect, however CW is closely linked to crab sex, with males generally being larger than females. There were no significant interactions. This analysis informed the analysis of main effects conducted next.
 ```{r}
 KM_Righting <- read.csv("~/Applied Quant Project/Righting-Response/Trial1_sublethal.csv")
 KM_Righting$Block=as.factor(KM_Righting$Block)
@@ -30,13 +30,12 @@ plot(KM_Righting$Duration, KM_Righting$CW )
 
 Analysis of Main Effects
 --
-This is analysis of righting responses of _P. armatus_. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves for righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects. This helped me determine how to present differences between my main effects.
+This is analysis of righting responses of _P. armatus_. I tested the main effects: site, sex, block and crab size (CW) by generating Kaplan-Meier curves for righting response data, main effects were tested with a Log Rank test. I next fitted these curves to a Cox proportional hazards model to determine differences in hazard risk between main effects. No significant differences were found between sites, but were detected between sexes and sizes. This helped me determine how to present differences between my main effects.
 ```{r}
 #KM Curves of main effects
 rr_mod1=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
 plot(rr_mod1, ylab='Survival Probability', xlab='Duration') 
-#disregard, this figure is not for publication but 
-
+ 
 #Log Rank test of main effects tests for differences
 rr_mod1_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
 rr_mod1_dif
@@ -52,13 +51,12 @@ anova(rr_mod1_cox)
 
 Analysis of Spatial Scale
 --
-The following is analysis of righting responses of _P. armatus_ at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in righting response. Differences in righting response exist between sites, locations, and regions.
+The following is analysis of righting responses of _P. armatus_ at three spatial scales. I tested the main effects, grouping data by site, location, and region, to determine inter-site and region differences in righting response. Differences in righting response exist between sites, locations, and regions, but can be best summarized on a regional scale (North vs South)
 ```{r}
 ##Analysis by SITE
 #KM Curves of main effects
 site_righting=survfit(Surv(Duration,Status)~Block+Site+Sex, data=KM_Righting)
-plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Model 1') 
-#disregard
+plot(site_righting, ylab='survival probabilty', xlab='Duration', main='Site') 
 
 #Log Rank test of main effects tests for differences
 site_righting_dif=survdiff(Surv(Duration,Status)~Block+Site+Sex,
@@ -80,7 +78,7 @@ anova(site_righting_cox)
 location_righting=survfit(Surv(Duration,Status)~Block+Location+Sex, 
                           data=KM_Righting)
 plot(location_righting, ylab='righting probabilty', xlab='Duration', 
-     main='Model 1') #disregard 
+     main='Location')
 
 #Log Rank test of main effects tests for differences
 location_righting_dif=survdiff(Surv(Duration,Status)~Block+Location+Sex,
@@ -102,8 +100,7 @@ anova(location_righting_cox)
 region_righting=survfit(Surv(Duration,Status)~Block+Region+Sex, 
                         data=KM_Righting)
 plot(region_righting, ylab='survival probabilty', xlab='Duration', 
-     main='Model 1')
-#disregard
+     main='Region')
 
 #Log Rank test of main effects tests for differences
 region_righting_dif=survdiff(Surv(Duration,Status)~Block+Region+Sex, 
@@ -122,7 +119,9 @@ anova(region_righting_cox)
 
 Analysis of Presentation Figures
 --
-The following is analysis of each of the presentation figures
+The following is more in depth analysis for each publication figure generated to illustrate the main effects (see Righting Response Figures.rmd)
+
+
 Figure 1: Sublethal Site
 Kaplan Meier curve of righting probability in P. armatus from both study sites at each location; from North to South, Baruch, Charleston, Bluffton (SC) and Savannah (GA) during cold temperature trial. Log-Rank test: X2 = 20.4, p = 0.617
 ```{r, echo=F}
@@ -142,30 +141,24 @@ Kaplan Meier curve of righting probability in P. armatus from Northern and South
 survdiff(Surv(Duration,Status)~Block+Region, data=KM_Righting)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
-#ANCOVA of main effects 
-anova(coxph(Surv(Duration,Status)~Block+Region, data=KM_Righting))
 ```
 
 Figure 3: Sublethal Sex
-
+Kaplan Meier curve of righting probability in P. armatus females and males during cold temperature trial. Log-Rank test: X2 = 15.9, p < 0.01
 ```{r, echo=F}
 #Log Rank test 
 survdiff(Surv(Duration,Status)~Block+Sex, data=KM_Righting)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
-#ANCOVA of main effects 
-anova(coxph(Surv(Duration,Status)~Block+Sex, data=KM_Righting))
 ```
 
 Figure 4: Sublethal Sex by Region
-Kaplan Meier curve of righting probability in P. armatus females and males during cold temperature trial. Log-Rank test: X2 = 15.9, p < 0.01
+Kaplan Meier curve of righting probability in P. armatus females and males from Northern or Southern sites during cold temperature trial. Log-Rank test: X2 = 22.1, p < 0.05
 ```{r, echo=F}
 #Log Rank
 survdiff(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting)
 #Cox proportional hazards model fit
 summary(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
-#ANOVA
-anova(coxph(Surv(Duration,Status)~Block+Sex+Region, data=KM_Righting))
 ```
 
 Figure 5: Sublethal Size Regression
